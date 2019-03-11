@@ -1,7 +1,8 @@
 {
   "name": "my-app",
   "scripts": {
-    "forever-start": "forever start node src/index.js",
+    "forever-start": "forever start src/index.js",
+    "forever-stop": "forever stop src/index.js",
     "start": "node src/index.js",
     "prisma": "prisma"
   },
