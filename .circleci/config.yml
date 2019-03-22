@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8
+    working_directory: ~/app
+    steps:
+      - checkout
+      - setup_remote_docker: # (2)
+          docker_layer_caching: true # (3)
+      - restore_cache: # special step to restore the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Setup Dependencies
+          command: npm install
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: "Deploy"
+          command: |
+            # docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            # docker build --build-arg --quiet=false -t "hackdie/testing-docker:0.0.9" -f ./Dockerfile .
+            # docker tag "hackdie/testing-docker:0.0.9" "hackdie/testing-docker:latest"
+            # docker push hackdie/testing-docker:0.0.9
+            # docker push hackdie/testing-docker:latest
+            echo date
+            # sudo apt-get -y -qq update
+            # sudo apt-get install python-pip python-dev build-essential
+            # sudo pip install ecs-deploy
+            # ecs deploy hackdie-cluster hackdie-ci-test-service --tag 0.0.9 --region $REGION --access-key-id $AWS_ACCESS_KEY --secret-access-key $AWS_SECRET_ACCESS
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
